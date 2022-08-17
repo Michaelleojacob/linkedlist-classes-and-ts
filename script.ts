@@ -199,13 +199,21 @@ class LinkedList {
 
 const migsList = new LinkedList();
 migsList.append(1);
+migsList.prepend(75);
 migsList.append(3);
 migsList.append(4);
 migsList.append(5);
+migsList.append('hi');
 migsList.insertAt(2, 2);
 migsList.removeAt(2);
 // migsList.removeAt(3);
 migsList.stringlog();
+// console.log(migsList.contains(1)); // true
+// console.log(migsList.contains('hi')); // true
+// console.log(migsList.contains('nope')); // false
+const checkPop = migsList.pop(); // should be 'hi'
+console.log(checkPop); // is 'hi'
+migsList.stringlog(); // should no longer include 'hi
 
 /**
  * Notes:
