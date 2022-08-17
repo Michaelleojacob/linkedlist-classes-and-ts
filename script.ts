@@ -242,4 +242,13 @@ migsList.stringlog();
  * linkedlist[1] means it has one item
  * so using index, we start at 1 as well.
  *
+ *
+ * *copy pointers points to the same place in memory
+ *
+ * let `copy = this.head()` mutating copy will change head.
+ * so we can traverse copy, `copy = copy.next`
+ * this.head still points to the first node
+ * and removing from copy also updates the entire list.
+ * logging/stringlog will reflect the changes made to the list.
+ * Even if I only change copy and not this.head.
  */
