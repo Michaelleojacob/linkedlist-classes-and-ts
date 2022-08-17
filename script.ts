@@ -21,8 +21,8 @@
  * -example: (value) -> (value) -> (value) -> null
  *
  * ?extra credit:
- * insertAt(value, index)
- * removeAt(index)
+ * -insertAt(value, index)
+ * -removeAt(index)
  *
  * #extra credit tip:
  * # when you insert or remove a node consider how it will
@@ -49,20 +49,20 @@ class NodeElement {
 }
 
 class LinkedList {
-  head: null | NodeElement;
-  size: number;
+  #_head: null | NodeElement;
+  #_size: number;
   constructor() {
-    this.head = null;
-    this.size = 0;
+    this.#_head = null;
+    this.#_size = 0;
   }
-  incrementSize() {
-    this.size = this.size + 1;
+  private _incrementSize() {
+    this.#_size = this.#_size + 1;
   }
-  decrementSize() {
-    this.size = this.size - 1;
+  private _decrementSize() {
+    this.#_size = this.#_size - 1;
   }
   getTail() {
-    let tail: any = this.head;
+    let tail: any = this.#_head;
     while (tail!.next) {
       tail = tail?.next;
     }
@@ -70,31 +70,30 @@ class LinkedList {
   }
   append(value: any) {
     const newNode = new NodeElement(value);
-    if (this.head === null) {
-      this.incrementSize();
-      return (this.head = newNode);
+    if (this.#_head === null) {
+      this._incrementSize();
+      return (this.#_head = newNode);
     } else {
-      this.incrementSize();
+      this._incrementSize();
       const tail = this.getTail();
       tail.next = newNode;
     }
   }
   prepend(value: any) {
-    const copy: any = this.head;
+    const copy: any = this.#_head;
     const newNode = { value, next: copy };
-    this.incrementSize();
-    return (this.head = newNode);
+    this._incrementSize();
+    return (this.#_head = newNode);
   }
   getSize() {
-    console.log(`size: ${this.size}`);
-    return this.size;
+    return this.#_size;
   }
   getHead() {
-    return this.head;
+    return this.#_head;
   }
   at(index: number) {
-    if (index >= 0 && index <= this.size && this.size > 0) {
-      let copy: any = this.head;
+    if (index >= 0 && index <= this.#_size && this.#_size > 0) {
+      let copy: any = this.#_head;
       let count: number = 1;
       while (count < index) {
         count = count + 1;
@@ -105,18 +104,17 @@ class LinkedList {
     return console.log(`${index} does not exist in the list`);
   }
   contains(value: any) {
-    let token: boolean = false;
-    let copy = this.head;
+    let copy = this.#_head;
     while (copy) {
       if (copy.value === value) {
-        token = true;
+        return true;
       }
       copy = copy.next;
     }
-    return token;
+    return false;
   }
   find(value: any) {
-    let copy = this.head;
+    let copy = this.#_head;
     while (copy) {
       if (copy.value === value) {
         return copy;
@@ -126,38 +124,38 @@ class LinkedList {
     return null;
   }
   pop() {
-    if (this.head === null) return null;
+    if (this.#_head === null) return null;
     if (this.getSize() === 1) {
-      const res = this.head;
-      this.head = null;
-      this.decrementSize();
+      const res = this.#_head;
+      this.#_head = null;
+      this._decrementSize();
       return res;
     }
-    let currentNode: any = this.head;
-    let secondToLastNode: any = this.head;
+    let currentNode: any = this.#_head;
+    let secondToLastNode: any = this.#_head;
     while (currentNode.next) {
       secondToLastNode = currentNode;
       currentNode = currentNode.next;
     }
     secondToLastNode.next = null;
-    this.decrementSize();
+    this._decrementSize();
     return currentNode;
   }
   shift() {
-    if (this.head === null) return null;
-    if (!this.head === null && this!.head?.next) {
-      const popNode = this.head;
-      this.head = this.head?.next;
-      this.decrementSize();
+    if (this.#_head === null) return null;
+    if (!this.#_head === null && this!.#_head?.next) {
+      const popNode = this.#_head;
+      this.#_head = this.#_head?.next;
+      this._decrementSize();
       return popNode;
     }
   }
   insertAt(value: any, index: number) {
-    if (this.head === null) return null;
-    const checkLegal = this.size >= index && index >= 0 ? true : false;
+    if (this.#_head === null) return null;
+    const checkLegal = this.#_size >= index && index >= 0 ? true : false;
     if (checkLegal) {
-      let fastPointer: any = this.head;
-      let slowPointer: any = this.head;
+      let fastPointer: any = this.#_head;
+      let slowPointer: any = this.#_head;
       let count = 1;
       while (count < index) {
         count = count + 1;
@@ -165,15 +163,15 @@ class LinkedList {
         fastPointer = fastPointer.next;
       }
       slowPointer.next = new NodeElement(value, fastPointer);
-      return this.incrementSize();
+      return this._incrementSize();
     }
   }
   removeAt(index: number) {
-    if (this.head === null) return null;
-    const checkLegal = this.size >= index && index >= 0 ? true : false;
+    if (this.#_head === null) return null;
+    const checkLegal = this.#_size >= index && index >= 0 ? true : false;
     if (checkLegal) {
-      let fastPointer: any = this.head;
-      let slowPointer: any = this.head;
+      let fastPointer: any = this.#_head;
+      let slowPointer: any = this.#_head;
       let count = 1;
       while (count < index) {
         count = count + 1;
@@ -182,15 +180,12 @@ class LinkedList {
       }
       const postList = fastPointer.next;
       slowPointer.next = postList;
-      return this.decrementSize();
+      return this._decrementSize();
     }
-  }
-  logHead() {
-    console.log(this.head);
   }
   stringlog() {
     let str = '';
-    let copy = this.head;
+    let copy = this.#_head;
     while (copy) {
       str += copy.value;
       str += ' > ';
@@ -221,8 +216,8 @@ migsList.stringlog();
  *
  * most methods that require count can start at count = 1
  * IF i am checking head is NOT NULL.
- * if(this.head === null) return null;
- * if(this.size > 0) count can always start at 1;
+ * if(this.#_head === null) return null;
+ * if(this.#_size > 0) count can always start at 1;
  *
  * *pop/insertAt/removeAt:
  *
@@ -245,10 +240,10 @@ migsList.stringlog();
  *
  * *copy pointers points to the same place in memory
  *
- * let `copy = this.head()` mutating copy will change head.
+ * let `copy = this.#_head()` mutating copy will change head.
  * so we can traverse copy, `copy = copy.next`
- * this.head still points to the first node
+ * this.#_head still points to the first node
  * and removing from copy also updates the entire list.
  * logging/stringlog will reflect the changes made to the list.
- * Even if I only change copy and not this.head.
+ * Even if I only change copy and not this.#_head.
  */
